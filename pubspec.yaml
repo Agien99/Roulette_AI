@@ -1,4 +1,4 @@
-name: roulette_predictor_app
+name: Roulette_AI_Predictor
 description: A new Flutter project.
 
 environment:
@@ -34,3 +34,5 @@ flutter_native_splash:
   android: true
   ios: true
   fullscreen: true
+  android_gravity: fill
+  ios_content_mode: scaleAspectFill

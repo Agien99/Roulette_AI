@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:roulette_predictor_app/main.dart'; // Import your main app screen
+import 'package:Roulette_AI_Predictor/main.dart'; // Import your main app screen
 import 'dart:async';
 
 class LoadingScreen extends StatefulWidget {
@@ -29,21 +29,24 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
 	Widget build(BuildContext context) {
 	  return Scaffold(
-		backgroundColor: Colors.black,
-		body: Center(
-		  child: Column(
-			mainAxisAlignment: MainAxisAlignment.center,
-			children: const [
-			  Image(
-				image: AssetImage('images/RouletteAIPredictor_main.png'),
-				width: 200, // Adjust size as needed
+		body: Stack(
+		  fit: StackFit.expand,
+		  children: [
+			Image.asset(
+			  'images/RouletteAIPredictor_main.png',
+			  fit: BoxFit.cover, // This makes the image fill the screen
+			),
+			Center(
+			  child: Column(
+				mainAxisAlignment: MainAxisAlignment.center,
+				children: const [
+				  CircularProgressIndicator(
+					valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+				  ),
+				],
 			  ),
-			  SizedBox(height: 24),
-			  CircularProgressIndicator(
-				valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-			  ),
-			],
-		  ),
+			),
+		  ],
 		),
 	  );
 	}

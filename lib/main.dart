@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:roulette_predictor_app/roulette_analyzer.dart';
-import 'package:roulette_predictor_app/loading_screen.dart';
+import 'package:Roulette_AI_Predictor/roulette_analyzer.dart';
+import 'package:Roulette_AI_Predictor/loading_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -92,6 +92,38 @@ class _RoulettePredictorScreenState extends State<RoulettePredictorScreen> {
     return Colors.black;
   }
 
+  List<Widget> _buildPredictionRows(List<int> numbers) {
+    List<Widget> rows = [];
+    for (int i = 0; i < numbers.length; i += 8) {
+      List<int> rowNumbers = numbers.sublist(i, (i + 8 > numbers.length) ? numbers.length : i + 8);
+      rows.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 6.0),
+          child: Center(
+            child: Wrap(
+              spacing: 1.0,
+              runSpacing: 1.0,
+              children: rowNumbers.map((number) => Chip(
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: const EdgeInsets.all(2.0),
+                label: SizedBox(
+                  width: 20, // Adjust as needed to fit two digits
+                  child: Text(
+                    number.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ),
+                backgroundColor: _getRouletteNumberColor(number),
+              )).toList(),
+            ),
+          ),
+        ),
+      );
+    }
+    return rows;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,16 +167,28 @@ class _RoulettePredictorScreenState extends State<RoulettePredictorScreen> {
                   children: [
                     const Text('Next Recommended Numbers:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 6.0,
-                      runSpacing: 6.0,
-                      children: _predictions.map((number) => Chip(
-                        label: Text(
-                          number.toString(),
-                          style: const TextStyle(color: Colors.white),
+                    if (_predictions.isNotEmpty && _predictions[0] == 0)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4.0),
+                        child: Center(
+                          child: Chip(
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            padding: const EdgeInsets.all(2.0),
+                            label: SizedBox(
+                              width: 20, // Adjust as needed to fit two digits
+                              child: Text(
+                                _predictions[0].toString(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white, fontSize: 12),
+                              ),
+                            ),
+                            backgroundColor: _getRouletteNumberColor(_predictions[0]),
+                          ),
                         ),
-                        backgroundColor: _getRouletteNumberColor(number),
-                      )).toList(),
+                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: _buildPredictionRows(_predictions.isNotEmpty && _predictions[0] == 0 ? _predictions.sublist(1) : _predictions),
                     ),
                   ],
                 ),
@@ -161,19 +205,19 @@ class _RoulettePredictorScreenState extends State<RoulettePredictorScreen> {
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Center(
                         child: SizedBox(
-                          width: 70, // Adjust size as needed
-                          height: 70, // Adjust size as needed
+                          width: 50, // Adjust size as needed
+                          height: 50, // Adjust size as needed
                           child: ElevatedButton(
                             onPressed: () => _onNumberPressed(0),
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(8),
                               backgroundColor: _getRouletteNumberColor(0),
                               foregroundColor: Colors.white,
                             ),
                             child: const Text(
                               '0',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 24),
                             ),
                           ),
                         ),
@@ -193,13 +237,13 @@ class _RoulettePredictorScreenState extends State<RoulettePredictorScreen> {
                         onPressed: () => _onNumberPressed(number),
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(8),
                           backgroundColor: _getRouletteNumberColor(number),
                           foregroundColor: Colors.white,
                         ),
                         child: Text(
                           number.toString(),
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 24),
                         ),
                       );
                     },
